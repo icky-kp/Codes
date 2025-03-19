@@ -2,84 +2,70 @@ import java.util.*;
 
 public class TopologicalSort {
     public static void main(String[] args) {
-        // Create a graph with 6 vertices
-        int V = 6;
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
 
+        // Input number of vertices and edges
+        System.out.println("Enter the number of vertices:");
+        int V = scanner.nextInt();
+        System.out.println("Enter the number of edges:");
+        int E = scanner.nextInt();
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
         for (int i = 0; i < V; i++) {
             adj.add(new ArrayList<>());
         }
 
-        // Add edges to represent dependencies
-        adj.get(5).add(2);
-        adj.get(5).add(0);
-        adj.get(4).add(0);
-        adj.get(4).add(1);
-        adj.get(2).add(3);
-        adj.get(3).add(1);
-
-        System.out.println("Topological Sort Order:");
-        int[] result = topoSort(V, adj);
-        for (int vertex : result) {
-            System.out.print(vertex + " ");
+        // Input edges
+        System.out.println("Enter the edges in the format: src dest");
+        for (int i = 0; i < E; i++) {
+            int src = scanner.nextInt();
+            int dest = scanner.nextInt();
+            adj.get(src).add(dest);
         }
 
-        // Example with a different graph
-        // System.out.println("\n\nAnother Example:");
-        // V = 4;
-        // adj = new ArrayList<>();
+        // Perform Topological Sort
+        int[] result = topoSort(V, adj);
 
-        // for (int i = 0; i < V; i++) {
-        // adj.add(new ArrayList<>());
-        // }
-
-        // adj.get(0).add(1);
-        // adj.get(0).add(2);
-        // adj.get(1).add(3);
-        // adj.get(2).add(3);
-
+        // Print the result
         System.out.println("Topological Sort Order:");
-        result = topoSort(V, adj);
         for (int vertex : result) {
             System.out.print(vertex + " ");
         }
     }
 
-    // Function to return array containing vertices in Topological order
+    // Function to perform Topological Sort using DFS
     private static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) {
-        int[] visited = new int[V];
+        boolean[] visited = new boolean[V];
         Stack<Integer> stack = new Stack<>();
 
-        // Call the recursive helper function for all unvisited vertices
+        // Perform DFS for all unvisited nodes
         for (int i = 0; i < V; i++) {
-            if (visited[i] == 0) {
-                dfs(i, visited, stack, adj);
+            if (!visited[i]) {
+                dfs(i, adj, visited, stack);
             }
         }
 
-        // Create result array from stack
-        int[] result = new int[V];
+        // Extract elements from the stack to get the topological order
+        int[] topoOrder = new int[V];
         int index = 0;
         while (!stack.isEmpty()) {
-            result[index++] = stack.pop();
+            topoOrder[index++] = stack.pop();
         }
 
-        return result;
+        return topoOrder;
     }
 
-    // DFS helper function
-    private static void dfs(int node, int[] visited, Stack<Integer> stack, ArrayList<ArrayList<Integer>> adj) {
-        // Mark current node as visited
-        visited[node] = 1;
+    // Helper function to perform DFS
+    private static void dfs(int node, ArrayList<ArrayList<Integer>> adj, boolean[] visited, Stack<Integer> stack) {
+        visited[node] = true;
 
-        // Visit all adjacent vertices
-        for (Integer neighbor : adj.get(node)) {
-            if (visited[neighbor] == 0) {
-                dfs(neighbor, visited, stack, adj);
+        for (int neighbor : adj.get(node)) {
+            if (!visited[neighbor]) {
+                dfs(neighbor, adj, visited, stack);
             }
         }
 
-        // After all neighbors are processed, add current node to stack
+        // Push the current node to the stack after visiting all its neighbors
         stack.push(node);
     }
 }
