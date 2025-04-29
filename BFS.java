@@ -36,10 +36,8 @@ public class BFS {
         System.out.println("Enter the number of vertices:");
         int V = scanner.nextInt();
 
-        System.out.println(
-                "Enter the edges as space-separated pairs (e.g., '0 1 0 2 1 3'). Enter an empty line to finish:");
+        System.out.println("Enter the edges in the format '1-2', '2-3', etc. Enter an empty line to finish:");
         scanner.nextLine(); // Consume the newline character
-        String edgeInput = scanner.nextLine();
 
         ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
         for (int i = 0; i < V; i++) {
@@ -47,10 +45,15 @@ public class BFS {
         }
 
         // Parse the edges
-        String[] edges = edgeInput.split(" ");
-        for (int i = 0; i < edges.length; i += 2) {
-            int u = Integer.parseInt(edges[i]);
-            int v = Integer.parseInt(edges[i + 1]);
+        while (true) {
+            String edgeInput = scanner.nextLine().trim();
+            if (edgeInput.isEmpty()) {
+                break; // Stop when an empty line is entered
+            }
+
+            String[] edge = edgeInput.split("-");
+            int u = Integer.parseInt(edge[0]) - 1; // Convert to 0-based indexing
+            int v = Integer.parseInt(edge[1]) - 1; // Convert to 0-based indexing
             adj.get(u).add(v);
             adj.get(v).add(u); // Assuming an undirected graph
         }
@@ -61,7 +64,7 @@ public class BFS {
         // Print the result
         System.out.println("BFS Traversal:");
         for (int node : ans) {
-            System.out.print(node + " ");
+            System.out.print((node + 1) + " "); // Convert back to 1-based indexing for output
         }
     }
 }

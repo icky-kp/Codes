@@ -30,6 +30,16 @@ public class LoopDetection {
         System.out.println("Loop not found");
     }
 
+    // void printList() {
+    //     Node current = head;
+    //     System.out.print("Linked List: ");
+    //     while (current != null) {
+    //         System.out.print(current.data + " -> ");
+    //         current = current.next;
+    //     }
+    //     System.out.println("null");
+    // }
+
     public static void main(String[] args) {
         LoopDetection list = new LoopDetection();
         list.push(20);
@@ -37,7 +47,10 @@ public class LoopDetection {
         list.push(10);
         list.push(5);
 
+        // Uncomment the next line to create a loop
         list.head.next.next.next.next = list.head;
-        list.detectLoop();
+
+        // list.printList(); // Print the linked list
+        list.detectLoop(); // Detect if a loop exists
     }
 }
